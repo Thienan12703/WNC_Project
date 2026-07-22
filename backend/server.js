@@ -45,11 +45,15 @@ app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 // =========================================================
 // Chọn 'build' hoặc 'dist' (đảm bảo folder này đã được copy vào folder backend)
 const frontendPath = path.join(__dirname, 'dist');
-// Nếu request gọi vào API hoặc Uploads mà không thấy thì chuyển qua handler 404
-if (req.originalUrl.startsWith('/api') || req.originalUrl.startsWith('/uploads')) {
-  return next();
-}
-res.sendFile(path.join(frontendPath, 'index.html'));
+
+app.use(express.static(frontendPath));
+
+app.get(/(.*)/, (req, res, next) => {
+  // Nếu request gọi vào API hoặc Uploads mà không thấy thì chuyển qua handler 404
+  if (req.originalUrl.startsWith('/api') || req.originalUrl.startsWith('/uploads')) {
+    return next();
+  }
+  res.sendFile(path.join(frontendPath, 'index.html'));
 });
 
 // =========================================================
