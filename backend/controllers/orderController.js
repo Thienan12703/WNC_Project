@@ -9,8 +9,8 @@ const addOrderItems = async (req, res) => {
       return res.status(400).json({ message: 'Không có sản phẩm trong đơn hàng' });
     }
 
-    if (!shippingAddress || !shippingAddress.fullName || !shippingAddress.phone || !shippingAddress.address) {
-      return res.status(400).json({ message: 'Vui lòng cung cấp địa chỉ giao hàng đầy đủ' });
+    if (!shippingAddress || !shippingAddress.fullName || !shippingAddress.email || !shippingAddress.phone || !shippingAddress.address) {
+      return res.status(400).json({ message: 'Vui lòng cung cấp địa chỉ giao hàng đầy đủ (bao gồm cả email)' });
     }
 
     const validPaymentMethods = ['COD', 'Momo', 'VNPay'];
@@ -53,7 +53,7 @@ const addOrderItems = async (req, res) => {
     const finalTotal = Math.max(0, computedTotal - (Number(discountAmount) || 0));
 
     const order = new Order({
-      user: req.user._id,
+      user: req.user ? req.user._id : undefined,
       items: orderItems,
       shippingAddress,
       totalPrice: finalTotal,
@@ -140,10 +140,27 @@ const getOrderById = async (req, res) => {
   }
 };
 
+const trackOrder = async (req, res) => {
+  try {
+    const order = await Order.findOne({ orderCode: req.params.orderCode })
+      .populate('items.product', 'name price image brand')
+      .populate('user', 'id name email');
+
+    if (order) {
+      res.json(order);
+    } else {
+      res.status(404).json({ message: 'Không tìm thấy đơn hàng với mã này' });
+    }
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
 module.exports = {
   addOrderItems,
   getMyOrders,
   getOrders,
   updateOrderStatus,
   getOrderById,
+  trackOrder,
 };

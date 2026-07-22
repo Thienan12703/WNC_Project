@@ -37,4 +37,27 @@ const admin = (req, res, next) => {
   }
 };
 
-module.exports = { protect, admin };
+const optionalAuth = async (req, res, next) => {
+  let token;
+
+  if (
+    req.headers.authorization &&
+    req.headers.authorization.startsWith('Bearer')
+  ) {
+    try {
+      token = req.headers.authorization.split(' ')[1];
+      const decoded = jwt.verify(token, process.env.JWT_SECRET || 'secret');
+      req.user = await User.findById(decoded.id).select('-password');
+      
+      if (req.user) {
+          req.user.role = decoded.role || req.user.role;
+          req.user.isAdmin = req.user.role === 'admin';
+      }
+    } catch (error) {
+      console.error('Auth error in optionalAuth:', error.message);
+    }
+  }
+  return next();
+};
+
+module.exports = { protect, admin, optionalAuth };

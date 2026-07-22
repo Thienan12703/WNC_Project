@@ -56,6 +56,7 @@ const Header = () => {
                         <Link to="/products?category=vot-cau-long" className="hover:text-primary transition-colors font-medium">Vợt</Link>
                         <Link to="/products?category=giay-cau-long" className="hover:text-primary transition-colors font-medium">Giày</Link>
                         <Link to="/posts" className="hover:text-primary transition-colors font-medium">Bài viết</Link>
+                        <Link to="/track" className="hover:text-primary transition-colors font-medium">Tra cứu đơn hàng</Link>
                     </nav>
 
                     {/* Desktop Search & Actions */}
@@ -161,6 +162,7 @@ const Header = () => {
                             <Link to="/products?category=vot-cau-long" onClick={() => setIsMenuOpen(false)} className="text-gray-300 hover:text-primary font-medium text-lg">🏸 Vợt cầu lông</Link>
                             <Link to="/products?category=giay-cau-long" onClick={() => setIsMenuOpen(false)} className="text-gray-300 hover:text-primary font-medium text-lg">👟 Giày cầu lông</Link>
                             <Link to="/posts" onClick={() => setIsMenuOpen(false)} className="text-gray-300 hover:text-primary font-medium text-lg">📰 Bài viết</Link>
+                            <Link to="/track" onClick={() => setIsMenuOpen(false)} className="text-gray-300 hover:text-primary font-medium text-lg">📦 Tra cứu đơn hàng</Link>
                             
                             {user ? (
                                 <>

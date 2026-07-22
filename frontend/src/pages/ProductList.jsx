@@ -36,6 +36,7 @@ const ProductList = () => {
             if (paramsObj.brand) params.append('brand', paramsObj.brand);
             if (paramsObj.minPrice) params.append('minPrice', paramsObj.minPrice);
             if (paramsObj.maxPrice) params.append('maxPrice', paramsObj.maxPrice);
+            if (paramsObj.keyword) params.append('keyword', paramsObj.keyword);
 
             const [productsRes, categoriesRes] = await Promise.all([
                 axiosClient.get(`/api/products?${params.toString()}`),
@@ -54,21 +55,25 @@ const ProductList = () => {
     useEffect(() => {
         const queryParams = new URLSearchParams(location.search);
         const searchCategory = queryParams.get('category') || '';
+        const searchKeyword = queryParams.get('keyword') || '';
         
         if (searchCategory) setCategoryFilter(searchCategory);
 
-        fetchProducts({ category: searchCategory });
+        fetchProducts({ category: searchCategory, keyword: searchKeyword });
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [location.search]);
 
     const handleSearch = async (e) => {
         e.preventDefault();
         setPage(1);
+        const queryParams = new URLSearchParams(location.search);
+        const searchKeyword = queryParams.get('keyword') || '';
         fetchProducts({
             category: categoryFilter,
             brand: brandFilter,
             minPrice,
-            maxPrice
+            maxPrice,
+            keyword: searchKeyword
         });
     };
 

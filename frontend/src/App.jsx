@@ -22,6 +22,7 @@ import ProtectedRoute from './components/ProtectedRoute';
 import Checkout from './pages/Checkout';
 import MyOrders from './pages/MyOrders';
 import OrderDetail from './pages/OrderDetail';
+import OrderTracking from './pages/OrderTracking';
 import Posts from './pages/Posts';
 import PostDetail from './pages/PostDetail';
 import AdminPosts from './pages/AdminPosts';
@@ -39,9 +40,11 @@ function App() {
           <Route path="/products" element={<ProductList />} />
           <Route path="/products/:id" element={<ProductDetail />} />
           <Route path="/cart" element={<Cart />} />
-          <Route path="/checkout" element={<ProtectedRoute><Checkout /></ProtectedRoute>} />
+          <Route path="/checkout" element={<Checkout />} />
           <Route path="/orders" element={<ProtectedRoute><MyOrders /></ProtectedRoute>} />
           <Route path="/orders/:id" element={<ProtectedRoute><OrderDetail /></ProtectedRoute>} />
+          <Route path="/track" element={<OrderTracking />} />
+          <Route path="/track/:orderCode" element={<OrderDetail />} />
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
           <Route path="/profile" element={<ProtectedRoute><Profile /></ProtectedRoute>} />

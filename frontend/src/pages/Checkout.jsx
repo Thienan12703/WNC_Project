@@ -9,7 +9,7 @@ const Checkout = () => {
     const items = useCartStore((s) => s.items);
     const clearCart = useCartStore((s) => s.clearCart);
     const user = useUserStore((s) => s.user);
-    const [shipping, setShipping] = useState({ fullName: user?.name || '', phone: '', address: '' });
+    const [shipping, setShipping] = useState({ fullName: user?.name || '', email: user?.email || '', phone: '', address: '' });
     const [paymentMethod, setPaymentMethod] = useState('COD');
     const [couponCode, setCouponCode] = useState('');
     const [discountAmount, setDiscountAmount] = useState(0);
@@ -38,7 +38,7 @@ const Checkout = () => {
     const submitOrder = async (e) => {
         e.preventDefault();
         if (items.length === 0) return setError('Giỏ hàng trống');
-        if (!shipping.fullName || !shipping.phone || !shipping.address) return setError('Vui lòng điền đủ thông tin giao hàng');
+        if (!shipping.fullName || !shipping.email || !shipping.phone || !shipping.address) return setError('Vui lòng điền đủ thông tin giao hàng (bao gồm email)');
         setLoading(true);
         setError(null);
 
@@ -52,7 +52,7 @@ const Checkout = () => {
 
             const { data } = await axiosClient.post('/api/orders', payload);
             clearCart();
-            navigate(`/orders/${data._id}`);
+            navigate(`/track/${data.orderCode}`);
         } catch (err) {
             setError(err.response?.data?.message || err.message);
         } finally {
@@ -107,9 +107,11 @@ const Checkout = () => {
                                         <label className="block text-sm font-semibold text-gray-700 mb-1">Email</label>
                                         <input 
                                             type="email"
-                                            value={user?.email || ''} 
-                                            disabled
-                                            className="w-full px-4 py-3 bg-gray-100 border border-gray-200 rounded-xl text-gray-500 cursor-not-allowed" 
+                                            value={shipping.email}
+                                            onChange={(e) => setShipping({ ...shipping, email: e.target.value })}
+                                            required
+                                            placeholder="Nhập email để nhận thông tin"
+                                            className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary focus:bg-white transition-all" 
                                         />
                                     </div>
                                 </div>
@@ -144,7 +146,7 @@ const Checkout = () => {
                                 <label className={`flex items-center gap-4 p-4 border rounded-xl cursor-pointer transition-all ${paymentMethod === 'Momo' ? 'border-primary bg-primary/5 ring-1 ring-primary' : 'border-gray-200 hover:border-gray-300'}`}>
                                     <input type="radio" name="payment" value="Momo" checked={paymentMethod === 'Momo'} onChange={() => setPaymentMethod('Momo')} className="w-5 h-5 text-primary focus:ring-primary" />
                                     <div className="flex-1 flex items-center gap-3">
-                                        <img src="https://upload.wikimedia.org/wikipedia/vi/f/fe/MoMo_Logo.png" alt="Momo" className="w-8 h-8 object-contain" />
+                                        <img src="https://cdn.haitrieu.com/wp-content/uploads/2022/10/Logo-MoMo-Square.png" alt="Momo" className="w-8 h-8 object-contain rounded-md" />
                                         <div>
                                             <span className="font-bold text-gray-900 block">Ví MoMo</span>
                                             <span className="text-sm text-gray-500">Chuyển khoản qua ứng dụng MoMo.</span>
