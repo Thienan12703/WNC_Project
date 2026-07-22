@@ -330,9 +330,9 @@ const AdminPosts = () => {
                   • List
                 </button>
                 <div className="w-px bg-gray-300 mx-1" />
-                {/* Insert image inside content */}
-                <label className="relative px-2 h-8 rounded text-xs text-gray-700 hover:bg-gray-200 transition-colors flex items-center gap-1 cursor-pointer" title="Chèn ảnh vào bài">
-                  <ImageIcon size={14} /> Ảnh
+                {/* Insert image inside content (Upload) */}
+                <label className="relative px-2 h-8 rounded text-xs text-gray-700 hover:bg-gray-200 transition-colors flex items-center gap-1 cursor-pointer" title="Tải ảnh từ máy">
+                  <ImageIcon size={14} /> Tải Ảnh
                   <input
                     type="file"
                     accept="image/*"
@@ -341,6 +341,22 @@ const AdminPosts = () => {
                     className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
                   />
                 </label>
+                {/* Insert image inside content (URL) */}
+                <button
+                  type="button"
+                  onMouseDown={(e) => {
+                    e.preventDefault();
+                    const url = window.prompt('Nhập URL ảnh:');
+                    if (url) {
+                      contentRef.current?.focus();
+                      document.execCommand('insertHTML', false, `<img src="${url}" alt="image" style="max-width:100%;margin:8px 0;border-radius:8px;" />`);
+                    }
+                  }}
+                  className="px-2 h-8 rounded text-xs text-gray-700 hover:bg-gray-200 transition-colors flex items-center gap-1"
+                  title="Chèn ảnh bằng link"
+                >
+                  <ImageIcon size={14} /> Link Ảnh
+                </button>
               </div>
 
               {/* Editable area */}
