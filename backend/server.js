@@ -21,7 +21,7 @@ connectDB();
 
 const app = express();
 
-app.use(cors({ origin: process.env.CLIENT_URL || 'http://localhost:5173' }));
+app.use(cors({ origin: process.env.CLIENT_URL || '*' }));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
@@ -40,11 +40,26 @@ app.use('/api/coupons', couponRoutes);
 // Static uploads folder
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
-app.get('/', (req, res) => {
-  res.send('API is running...');
+// =========================================================
+// SERVE FRONTEND (Đã chuyển lên trên handler 404)
+// =========================================================
+// Chọn 'build' hoặc 'dist' (đảm bảo folder này đã được copy vào folder backend)
+const frontendPath = path.join(__dirname, 'build');
+
+app.use(express.static(frontendPath));
+
+app.get(/(.*)/, (req, res, next) => {
+  // Nếu request gọi vào API hoặc Uploads mà không thấy thì chuyển qua handler 404
+  if (req.originalUrl.startsWith('/api') || req.originalUrl.startsWith('/uploads')) {
+    return next();
+  }
+  res.sendFile(path.join(frontendPath, 'index.html'));
 });
 
-// 404 handler
+// =========================================================
+// ERROR HANDLERS
+// =========================================================
+// 404 handler (chỉ áp dụng cho API không tồn tại)
 app.use((req, res, next) => {
   const error = new Error(`Không tìm thấy đường dẫn ${req.originalUrl}`);
   res.status(404);
@@ -62,14 +77,6 @@ app.use((err, req, res, next) => {
 
 const PORT = process.env.PORT || 5000;
 
-// 1. Chỉ định cho Express biết thư mục chứa file Frontend tĩnh (build hoặc dist)
-app.use(express.static(path.join(__dirname, 'build'))); // Thay 'build' thành 'dist' nếu dùng Vite
-
-// 2. Với mọi route khách hàng truy cập (không phải API), trả về file index.html của Frontend
-// Dùng /(.*) thay cho '*'
-app.get(/(.*)/, (req, res) => {
-  res.sendFile(path.join(__dirname, 'build', 'index.html')); // Hoặc 'dist'
-});
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
 });
