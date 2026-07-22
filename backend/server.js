@@ -66,8 +66,9 @@ const PORT = process.env.PORT || 5000;
 app.use(express.static(path.join(__dirname, 'build'))); // Thay 'build' thành 'dist' nếu dùng Vite
 
 // 2. Với mọi route khách hàng truy cập (không phải API), trả về file index.html của Frontend
-app.get('*', (req, res) => {
-  res.sendFile(path.join(__dirname, 'build', 'index.html'));
+// Dùng /(.*) thay cho '*'
+app.get(/(.*)/, (req, res) => {
+  res.sendFile(path.join(__dirname, 'build', 'index.html')); // Hoặc 'dist'
 });
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
