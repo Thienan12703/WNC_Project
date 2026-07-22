@@ -20,3 +20,5 @@ Thumbs.db
 
 # Vite
 dist/
+!backend/dist/
+!backend/dist/**
