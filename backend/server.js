@@ -61,6 +61,15 @@ app.use((err, req, res, next) => {
 });
 
 const PORT = process.env.PORT || 5000;
+const path = require('path');
+
+// 1. Chỉ định cho Express biết thư mục chứa file Frontend tĩnh (build hoặc dist)
+app.use(express.static(path.join(__dirname, 'build'))); // Thay 'build' thành 'dist' nếu dùng Vite
+
+// 2. Với mọi route khách hàng truy cập (không phải API), trả về file index.html của Frontend
+app.get('*', (req, res) => {
+  res.sendFile(path.join(__dirname, 'build', 'index.html'));
+});
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
 });
