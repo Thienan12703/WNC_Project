@@ -93,6 +93,15 @@ const Profile = () => {
                                 <input type="file" className="hidden" accept="image/*" onChange={handleUploadAvatar} />
                             </label>
                         </div>
+                        <div className="w-full mb-4 px-4">
+                            <input 
+                                type="text"
+                                placeholder="Hoặc dán URL ảnh..."
+                                value={avatar}
+                                onChange={(e) => setAvatar(e.target.value)}
+                                className="w-full px-3 py-2 bg-white/10 border border-white/20 rounded-lg text-white text-sm placeholder-gray-400 focus:outline-none focus:border-primary transition-colors text-center"
+                            />
+                        </div>
                         <h2 className="text-2xl font-bold line-clamp-1">{user?.name}</h2>
                         <p className="text-gray-400 mt-2 text-sm">{user?.email}</p>
                         <div className="mt-6 px-4 py-2 bg-white/10 rounded-full text-sm font-medium border border-white/20">

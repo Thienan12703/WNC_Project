@@ -240,20 +240,29 @@ const AdminPosts = () => {
             <div>
               <label className="block text-sm font-bold text-gray-700 mb-1">Ảnh thumbnail</label>
               <div className="flex gap-4 items-start">
-                <div className="flex-1 border-2 border-dashed border-gray-300 rounded-xl p-4 bg-gray-50 relative">
-                  <input
-                    type="file"
-                    accept="image/*"
-                    onChange={handleThumbnail}
-                    disabled={uploading}
-                    className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10"
-                  />
-                  <div className="text-center pointer-events-none">
-                    <ImageIcon size={28} className="mx-auto text-gray-400 mb-1" />
-                    <p className="text-sm font-medium text-gray-600">
-                      {uploading ? 'Đang tải...' : 'Kéo thả hoặc click để chọn ảnh'}
-                    </p>
+                <div className="flex-1 flex flex-col gap-2">
+                  <div className="border-2 border-dashed border-gray-300 rounded-xl p-4 bg-gray-50 relative">
+                    <input
+                      type="file"
+                      accept="image/*"
+                      onChange={handleThumbnail}
+                      disabled={uploading}
+                      className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10"
+                    />
+                    <div className="text-center pointer-events-none">
+                      <ImageIcon size={28} className="mx-auto text-gray-400 mb-1" />
+                      <p className="text-sm font-medium text-gray-600">
+                        {uploading ? 'Đang tải...' : 'Kéo thả hoặc click để chọn ảnh'}
+                      </p>
+                    </div>
                   </div>
+                  <input 
+                    type="text"
+                    placeholder="Hoặc dán URL ảnh vào đây..."
+                    value={form.thumbnail}
+                    onChange={(e) => setForm((f) => ({ ...f, thumbnail: e.target.value }))}
+                    className="w-full px-4 py-2 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary focus:bg-white transition-all font-medium text-sm"
+                  />
                 </div>
                 {form.thumbnail && (
                   <div className="relative">
