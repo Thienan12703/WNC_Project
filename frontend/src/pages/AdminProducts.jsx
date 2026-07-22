@@ -261,7 +261,7 @@ const AdminProducts = () => {
                             <div className="space-y-6">
                                 <div>
                                     <label className="block text-sm font-bold text-gray-700 mb-1">Hình ảnh</label>
-                                    <div className="border-2 border-dashed border-gray-300 rounded-xl p-4 bg-gray-50 relative">
+                                    <div className="border-2 border-dashed border-gray-300 rounded-xl p-4 bg-gray-50 relative mb-3">
                                         <input 
                                             type="file" 
                                             multiple 
@@ -272,10 +272,24 @@ const AdminProducts = () => {
                                         <div className="text-center pointer-events-none">
                                             <ImageIcon size={32} className="mx-auto text-gray-400 mb-2" />
                                             <p className="text-sm font-medium text-gray-600">
-                                                {uploading ? 'Đang tải lên...' : 'Kéo thả hoặc click để chọn ảnh'}
+                                                {uploading ? 'Đang tải lên...' : 'Kéo thả hoặc click để chọn ảnh (từ máy tính)'}
                                             </p>
                                         </div>
                                     </div>
+                                    <input 
+                                        type="text" 
+                                        placeholder="Hoặc dán URL ảnh (từ Google, Unsplash...) vào đây"
+                                        value={newProduct.image || ''}
+                                        onChange={(e) => {
+                                            const val = e.target.value;
+                                            const newImages = [...(newProduct.images || [])];
+                                            if (val && !newImages.includes(val)) {
+                                                newImages.unshift(val);
+                                            }
+                                            setNewProduct({ ...newProduct, image: val, images: newImages });
+                                        }}
+                                        className="w-full px-4 py-2 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary focus:bg-white transition-all text-sm font-medium"
+                                    />
 
                                     {/* Image Preview List */}
                                     {newProduct.images && newProduct.images.length > 0 && (
